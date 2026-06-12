@@ -97,3 +97,83 @@ h.style.left=Math.random()*100+'vw';
 document.body.appendChild(h);
 setTimeout(()=>h.remove(),8000);
 },700);
+const gallery = document.querySelector(".gallery");
+
+let autoScroll;
+
+function startAutoScroll(){
+
+    autoScroll = setInterval(() => {
+
+        const photoWidth =
+            gallery.querySelector("img").offsetWidth + 18;
+
+        const maxScroll =
+            gallery.scrollWidth - gallery.clientWidth;
+
+        if(gallery.scrollLeft >= maxScroll - 20){
+
+            gallery.scrollTo({
+                left:0,
+                behavior:"smooth"
+            });
+
+            return;
+        }
+
+        gallery.scrollTo({
+            left:gallery.scrollLeft + photoWidth,
+            behavior:"smooth"
+        });
+
+    },3000);
+
+}
+
+startAutoScroll();
+
+gallery.addEventListener("touchstart", () => {
+    clearInterval(autoScroll);
+});
+
+gallery.addEventListener("touchend", () => {
+
+    setTimeout(() => {
+
+        clearInterval(autoScroll);
+
+        startAutoScroll();
+
+    },5000);
+
+});
+const certificate =
+    document.getElementById("certificateSection");
+
+let certificateShown = false;
+
+window.addEventListener("scroll", () => {
+
+    const rect =
+        certificate.getBoundingClientRect();
+
+    if(
+        rect.top < window.innerHeight * 0.7 &&
+        !certificateShown
+    ){
+
+        certificateShown = true;
+
+        certificate.classList.add("show");
+
+        confetti({
+            particleCount:300,
+            spread:180,
+            origin:{
+                y:0.6
+            }
+        });
+
+    }
+
+});
